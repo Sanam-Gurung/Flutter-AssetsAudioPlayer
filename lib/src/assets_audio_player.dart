@@ -678,7 +678,11 @@ class AssetsAudioPlayer {
             break;
         }
       }
-      await _sendChannel.invokeMethod('stopForegroundService');
+      try {
+        await _notificationOpenChannel.invokeMethod('stopForegroundService');
+      } on PlatformException catch (e) {
+        print('Error invoking stopForegroundService: ${e.message}');
+      }
     }, onForeground: () {
       if (_playlist != null) {
         switch (_playlist!.playInBackground) {

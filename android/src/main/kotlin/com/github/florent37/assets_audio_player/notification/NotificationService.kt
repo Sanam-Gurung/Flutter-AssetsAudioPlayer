@@ -129,6 +129,11 @@ class NotificationService : Service() {
         }
     }
 
+    fun stopForegroundService() {
+        stopForeground(true)
+        stopSelf()
+    }
+
     @RequiresApi(Build.VERSION_CODES.ECLAIR)
     override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
         if (intent.action == Intent.ACTION_MEDIA_BUTTON) {
@@ -138,15 +143,7 @@ class NotificationService : Service() {
         }
         when (val notificationAction = intent.getSerializableExtra(EXTRA_NOTIFICATION_ACTION)) {
             is NotificationAction.Show -> {
-                if (intent.getStringExtra("action") == "stopForegroundService") {
-                    // Stop the foreground service
-                    stopForeground(true)
-                    stopSelf()
-                } else {
-                    displayNotification(notificationAction)
-                }
-
-
+                displayNotification(notificationAction)
             }
             is NotificationAction.Hide -> {
                 hideNotif()
